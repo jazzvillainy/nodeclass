@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const { productsList } = require("../constants");
-// const { route } = require("../app");
-const { app } = require("../app");
-const Product = require('../models/productModel')
-// const mongoose = require("../app");
+const ProductModel = require("../models/productModel");
 
-router.get("/", (req, res) => {
-  res.status(200).json(productsList);
+router.get("/", async (req, res) => {
+  console.log("Point 1");
+
+  const products = await ProductModel.find();
+  res.status(200).send(products);
 });
 
 router.get("/:id", (req, res) => {
@@ -17,17 +17,22 @@ router.get("/:id", (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
-    const product = new Product({
+    const product = new ProductModel({
+      title: req.body.title,
       category: req.body.category,
       description: req.body.description,
-      price: Number(req.body.price),
-      title: req.body.title,
+      price: req.body.price,
     });
 
     await product.save();
+
+    res.json({
+      message: `${product.title} has been added successfully`,
+      data: product,
+    });
     // mongoose.disconnect();
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
 });
 
