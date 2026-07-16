@@ -8,10 +8,11 @@ app.use(express.json());
 
 mongoose
   .connect(
-    `mongodb+srv://crescentdede_db_user:${process.env.DATABASE_SECRETS}@cluster0.xccfa1t.mongodb.net/?appName=Cluster0`,
+    `mongodb+srv://crescentdede_db_user:${process.env.DATABASE_SECRET}@cluster0.93vsat8.mongodb.net/?appName=Cluster0`,
   )
   .then(() => console.log("Connection to db successful"))
   .catch((err) => console.log(err));
+  
 
 app.use("/products", productsRoute);
 app.use("/user", userRoutes);

@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const UserModel = require("../models/usermodel");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 router.post("/signup", async (req, res) => {
   const alreadyExistingUser = await UserModel.find({ email: req.body.email });
@@ -30,6 +31,7 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
+  //Checking if user is already registered
   const alreadyExistingUser = await UserModel.find({ email: req.body.email });
   if (alreadyExistingUser.length >= 1) {
     try {
@@ -39,13 +41,23 @@ router.post("/signin", async (req, res) => {
       );
       // console.log(compareaPasswords);
 
-      res.status(200).json({ meessage: "user logged in successfully" });
+      const token = await jwt.sign(
+        { email: alreadyExistingUser[0].email },
+        "Goonygoogoo",
+        {
+          expiresIn: 60 * 60,
+        },
+      );
+
+      res
+        .status(200)
+        .json({ message: "user logged in successfully", token: token });
     } catch (e) {
       console.log(e);
       res.status(400).json({ message: " wrong email or password" });
     }
   } else {
-    res.status(400).json({ message: " wrong email or password" });
+    res.status(400).json({ message: " this email does not exist" });
   }
 });
 
