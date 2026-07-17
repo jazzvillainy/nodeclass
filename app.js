@@ -7,12 +7,12 @@ const userRoutes = require("./routes/user");
 app.use(express.json());
 
 mongoose
-  .connect(
-    `mongodb+srv://crescentdede_db_user:${process.env.DATABASE_SECRET}@cluster0.93vsat8.mongodb.net/?appName=Cluster0`,
-  )
+  .connect(process.env.DATABASE_SECRET)
   .then(() => console.log("Connection to db successful"))
   .catch((err) => console.log(err));
-  
+// app.post("/", (req, res) => {
+//   console.log(req.headers);
+// });
 
 app.use("/products", productsRoute);
 app.use("/user", userRoutes);

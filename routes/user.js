@@ -14,7 +14,7 @@ router.post("/signup", async (req, res) => {
     10,
     // "goonygoogoolooneycuckoo",
   );
-  console.log(hashedpassword);
+  // console.log(hashedpassword);
 
   try {
     const user = new UserModel({
@@ -43,7 +43,7 @@ router.post("/signin", async (req, res) => {
 
       const token = await jwt.sign(
         { email: alreadyExistingUser[0].email },
-        "Goonygoogoo",
+        process.env.SECRETS,
         {
           expiresIn: 60 * 60,
         },

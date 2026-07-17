@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { productsList } = require("../constants");
 const ProductModel = require("../models/productModel");
+const authMiddleware = require("../middlewares/check-auth");
+const { addtocart, getSingleItem } = require("../controller/productController");
 
 router.get("/", async (req, res) => {
   console.log("Point 1");
@@ -10,10 +12,9 @@ router.get("/", async (req, res) => {
   res.status(200).send(products);
 });
 
-router.get("/:id", (req, res) => {
-  const singleItem = productsList.filter((item) => item.id == req.params.id);
-  res.status(200).json(singleItem);
-});
+router.post("/addtocart", authMiddleware, addtocart);
+
+router.get("/:id", getSingleItem);
 
 router.post("/add", async (req, res) => {
   try {
